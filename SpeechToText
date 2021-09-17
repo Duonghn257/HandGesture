@@ -1,0 +1,26 @@
+import speech_recognition as sr
+import os
+
+i_path = 'D:\Lab_Thay_Su\\Report\\RPT_SpeechToText\\Wav_File\\000052021082707010101'
+o_path = 'D:\Lab_Thay_Su\\Report\\RPT_SpeechToText\\Text_File\\000052021082707010101'
+
+if os.path.isdir(o_path) is not True:
+    os.mkdir(o_path)
+os.chdir(o_path)
+
+r = sr.Recognizer()
+for wav_file in os.listdir(i_path):
+    if wav_file.endswith('.wav'):
+        with sr.AudioFile(i_path + '\\' + wav_file) as source:
+            #LOAD ÂM THANH
+            audio_data = r.record(source)
+            #NHẬN BIẾT TIẾNG VIỆT
+            txt_name = wav_file.replace('.wav', '.txt')
+            try:
+                text = r.recognize_google(audio_data, language = 'vi-VN')
+                with open(txt_name, 'w', encoding='utf-8') as txt_file:
+                    txt_file.writelines(text)
+                print(txt_name)
+            except Exception as e:
+                print('{} !!!'.format(txt_name))
+                print(e)
